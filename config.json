@@ -1,0 +1,22 @@
+{
+  "schema": {
+    "xmrAddress": {
+      "type": "string",
+      "required": true,
+      "default": "",
+      "description": "Enter your Monero Wallet Address starting with 4~"
+    },
+    "threads": {
+      "type": "integer",
+      "required": true,
+      "default": 2,
+      "description": "Number of threads for mining"
+    }
+  },
+  "i18n": {
+    "en": {
+      "xmrAddress": "Monero Wallet Address",
+      "threads": "Number of Threads"
+    }
+  }
+}

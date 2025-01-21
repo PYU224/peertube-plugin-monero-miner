@@ -1,0 +1,41 @@
+{
+  "manifestVersion": 1,
+  "id": "peertube-plugin-monero-miner",
+  "name": "Monero Miner Plugin",
+  "description": "A PeerTube plugin that integrates Monero mining functionality.",
+  "author": "Your Name",
+  "license": "MIT",
+  "version": "1.0.0",
+  "mainScript": "main.js",
+  "translations": {
+    "en": "./languages/en.json",
+    "fr": "./languages/fr.json"
+  },
+  "settings": [
+    {
+      "id": "pooladdress",
+      "type": "string",
+      "default": "https://moneroocean.stream",
+      "label": "Monero Pool URL"
+    },
+    {
+      "id": "websocket",
+      "type": "string",
+      "default": "wss://ny1.xmrminingproxy.com",
+      "label": "Monero Pool URL"
+    },
+    {
+      "id": "walletAddress",
+      "type": "string",
+      "default": "",
+      "label": "Wallet Address"
+    },
+    {
+      "id": "threadCount",
+      "type": "number",
+      "default": 2,
+      "label": "Number of Threads"
+    }
+  ]
+}
+

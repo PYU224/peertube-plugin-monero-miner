@@ -1,0 +1,7 @@
+{
+  "plugin_name": "Monero Miner Plugin",
+  "plugin_description": "Adds a Monero miner to PeerTube",
+  "wallet_address_label": "Monero Wallet Address starting with 4~",
+  "threads_label": "Number of Threads",
+  "save_button": "Save Settings"
+}
