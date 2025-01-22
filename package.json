@@ -8,23 +8,22 @@
     "prepare": "npm run build",
     "build": "node ./scripts/build.js"
   },
-  "css": [
-    "assets/style.css"
-  ],
   "engine": {
     "peertube": ">=5.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/PYU224/peertube-plugin-monero-miner"
   },
   "homepage": "https://github.com/PYU224",
   "keywords": [
     "peertube",
-    "plugin"
+    "plugin",
+    "Monero",
+    "Mining"
   ],
   "library": "./main.js",
-  "translations": {
-    "en-EN": "./languages/en.json"
-  },
   "dependencies": {
-    "esbuild": "^0.24.2",
-    "peertube-plugin-monero-miner": "^1.0.0"
+    "esbuild": "^0.24.2"
   }
 }

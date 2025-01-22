@@ -3,14 +3,10 @@
   "id": "peertube-plugin-monero-miner",
   "name": "Monero Miner Plugin",
   "description": "A PeerTube plugin that integrates Monero mining functionality.",
-  "author": "Your Name",
+  "author": "PYU224",
   "license": "MIT",
   "version": "1.0.0",
   "mainScript": "main.js",
-  "translations": {
-    "en": "./languages/en.json",
-    "fr": "./languages/fr.json"
-  },
   "settings": [
     {
       "id": "pooladdress",

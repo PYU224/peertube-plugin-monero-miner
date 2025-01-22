@@ -12,9 +12,9 @@ module.exports = class MoneroMinerPlugin extends Plugin {
   async loadSettings() {
     if (fs.existsSync(this.settingsFilePath)) {
       const data = fs.readFileSync(this.settingsFilePath, 'utf-8');
-      return JSON.parse(data); 
+      return JSON.parse(data);
     } else {
-      return { walletAddress: '114514', webSocket: 'wss://ny1.xmrminingproxy.com', poolAddress: 'moneroocean.stream', threads: 2 }; // デフォルト設定
+      return { walletAddress: '1145148101919', webSocket: 'wss://ny1.xmrminingproxy.com', poolAddress: 'moneroocean.stream', threads: 2 }; // デフォルト設定
     }
   }
 
@@ -28,7 +28,7 @@ module.exports = class MoneroMinerPlugin extends Plugin {
   // フック：管理画面に設定フォームを追加
   async hooks() {
     const settings = await this.loadSettings();
-    
+
     return [
       {
         target: 'admin.plugins.list',
