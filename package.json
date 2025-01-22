@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/PYU224/peertube-plugin-monero-miner"
+    "url": "git+ssh://git@github.com/PYU224/peertube-plugin-monero-miner.git"
   },
   "homepage": "https://github.com/PYU224",
   "keywords": [
