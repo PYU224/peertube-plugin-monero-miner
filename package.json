@@ -22,6 +22,14 @@
     "Monero",
     "Mining"
   ],
+  "clientScripts": [
+    {
+      "script": "client/common-client-plugin.js",
+      "scopes": [
+        "common"
+      ]
+    }
+  ],
   "library": "./main.js",
   "devDependencies": {
     "esbuild": "^0.24.2"
