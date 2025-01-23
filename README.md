@@ -20,7 +20,7 @@ Issueとかでご意見や改善案を出してくださると嬉しいです。
 
 # ご支援とかリンクとか色々
 
-・NPM（Peertubeのプラグインを公開している所）
+・NPM（Peertubeのプラグインを公開しているページ）
 
 https://www.npmjs.com/package/peertube-plugin-monero-miner
 
@@ -29,3 +29,7 @@ https://www.npmjs.com/package/peertube-plugin-monero-miner
 https://x.com/PYU224
 
 https://linksta.cc/@pyu224
+
+・ご支援とか（Misskeyサーバーの規約と寄付の方法が載っています）
+
+https://github.com/PYU224/misskey-data

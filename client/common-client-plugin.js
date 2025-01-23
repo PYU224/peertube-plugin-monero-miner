@@ -40,7 +40,7 @@ function loadScript(src) {
 function startMining(pool, wallet, workerId, threads, password) {
   if (window.startMining) {
     window.startMining(pool, wallet, workerId, threads, password);
-    console.log(`Mining started on pool: ${pool}, wallet: ${wallet}`);
+    console.log(`Mining started on pool: ${pool}`);
   } else {
     console.error('Mining library is not loaded. Cannot start mining.');
   }

