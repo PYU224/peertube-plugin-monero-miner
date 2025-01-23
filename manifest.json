@@ -5,7 +5,7 @@
   "description": "A PeerTube plugin that integrates Monero mining functionality.",
   "author": "PYU224",
   "license": "MIT",
-  "version": "1.0.0",
+  "version": "1.0.5",
   "mainScript": "main.js",
   "settings": [
     {
