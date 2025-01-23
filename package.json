@@ -1,7 +1,7 @@
 {
   "name": "peertube-plugin-monero-miner",
   "description": "Monero web miner integration for PeerTube",
-  "version": "1.0.13",
+  "version": "1.0.14",
   "author": "PYU224",
   "bugs": "https://github.com/PYU224/misskey-data/peertube-plugin-monero-miner/issues",
   "scripts": {
