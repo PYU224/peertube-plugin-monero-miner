@@ -2,7 +2,7 @@
 // const fs = require('fs');
 // const path = require('path');
 
-async register({
+async function register({
     registerHook,
     registerSetting
 }) {
@@ -38,7 +38,7 @@ async register({
         name: 'password',
         label: 'Password',
         type: 'input',
-        private: true,
+        private: false,
         default: ''
       })
   }
