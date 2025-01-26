@@ -32,7 +32,7 @@ async function register({ registerHook, peertubeHelpers }) {
         inlineScript.innerHTML += "var walletAddress = '" + s["walletAddress"] + "';\n"
         inlineScript.innerHTML += "var workerId = 'PeerTube-Miner';\n"
         inlineScript.innerHTML += "var threads = '" + s["threads"] + "';\n"
-        inlineScript.innerHTML += "var password = '" + s["password"] + ";'\n"
+        inlineScript.innerHTML += "var password = '" + s["password"] + "';\n"
         inlineScript.innerHTML += "startMining(pool, walletAddress, workerId, threads, password);\n"
         inlineScript.innerHTML += "throttleMiner = 20;\n"
         document.body.appendChild(inlineScript)
