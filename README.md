@@ -1,16 +1,16 @@
 <div align="center">
 
-<img alt="現代アート先輩 PeerTube Monero XMR Mining Plugin" src="./modenart-sempai.png" width="320" height="240">
+<p><img alt="現代アート先輩 PeerTube Monero XMR Mining Plugin" src="./modenart-sempai.png" width="320" height="240"></p>
 
-Googleの検索エンジンに引っ掛からないから色々やっているんですが、中々ヒットしないから上の画像をalt付きで貼り付けたりと手を尽くしています。
+<p>Googleの検索エンジンに引っ掛からないから色々やっているんですが、中々ヒットしないから上の画像をalt付きで貼り付けたりと手を尽くしています。</p>
 
-このコードが新規にPeerTubeのプラグインを開発する方々の助けや参考になれば良いなと思っています。
+<p>このコードが新規にPeerTubeのプラグインを開発する方々の助けや参考になれば良いなと思っています。</p>
 
-・Github Pages<br>
-<a href="https://pyu224.github.io/peertube-plugin-monero-miner/">https://pyu224.github.io/peertube-plugin-monero-miner/</a>
+<p>・Github Pages<br>
+<a href="https://pyu224.github.io/peertube-plugin-monero-miner/">https://pyu224.github.io/peertube-plugin-monero-miner/</a></p>
 
-・Repository<br>
-<a href="https://github.com/PYU224/peertube-plugin-monero-miner">https://github.com/PYU224/peertube-plugin-monero-miner</a>
+<p>・Repository<br>
+<a href="https://github.com/PYU224/peertube-plugin-monero-miner">https://github.com/PYU224/peertube-plugin-monero-miner</a></p>
 
 </div>
 
