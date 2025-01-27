@@ -110,10 +110,6 @@ externalScript.onerror = function() {
 
 <a href="https://www.npmjs.com/package/peertube-plugin-monero-miner">https://www.npmjs.com/package/peertube-plugin-monero-miner</a>
 
-・Github.ioページ
-
-<a href="https://pyu224.github.io/peertube-plugin-monero-miner/">https://pyu224.github.io/peertube-plugin-monero-miner/</a>
-
 ・プロフィール
 
 <a href="https://x.com/PYU224">https://x.com/PYU224</a>
