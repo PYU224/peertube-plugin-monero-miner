@@ -1,6 +1,6 @@
 <div align="center">
 
-<img alt="現代アート先輩 PeerTube Monero XMR Mining Plugin" src="./modenart-sempai.png" width="400" height="300">
+<img alt="現代アート先輩 PeerTube Monero XMR Mining Plugin" src="./modenart-sempai.png" width="320" height="240">
 
 Googleの検索エンジンに引っ掛からないから色々やっているんですが、中々ヒットしないから上の画像をalt付きで貼り付けたりと手を尽くしています。
 
