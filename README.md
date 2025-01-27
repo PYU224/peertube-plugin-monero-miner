@@ -16,13 +16,13 @@
 
 # PeerTube plugin Quickstart
 
-See https://docs.joinpeertube.org/#/contribute-plugins?id=write-a-plugintheme
+See <a href="https://docs.joinpeertube.org/#/contribute-plugins?id=write-a-plugintheme">https://docs.joinpeertube.org/#/contribute-plugins?id=write-a-plugintheme</a>
 
 下記のマイニングスクリプトを組み込めないかと色々やってみました。
 
 開発者のNajm Ajmal様、ありがとうございます。
 
-https://github.com/NajmAjmal/monero-webminer
+<a href="https://github.com/NajmAjmal/monero-webminer">https://github.com/NajmAjmal/monero-webminer</a>
 
 Issueとかでご意見や改善案を出してくださると嬉しいです。
 
@@ -108,14 +108,14 @@ externalScript.onerror = function() {
 
 ・NPM（Peertubeのプラグインを公開しているページ）
 
-https://www.npmjs.com/package/peertube-plugin-monero-miner
+<a href="https://www.npmjs.com/package/peertube-plugin-monero-miner">https://www.npmjs.com/package/peertube-plugin-monero-miner</a>
 
 ・プロフィール
 
-https://x.com/PYU224
+<a href="https://x.com/PYU224">https://x.com/PYU224</a>
 
-https://linksta.cc/@pyu224
+<a href="https://linksta.cc/@pyu224">https://linksta.cc/@pyu224</a>
 
 ・ご支援とか（Misskeyサーバーの規約と寄付の方法が載っています）
 
-https://github.com/PYU224/misskey-data
+<a href="https://github.com/PYU224/misskey-data">https://github.com/PYU224/misskey-data</a>
